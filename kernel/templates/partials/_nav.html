@@ -1,0 +1,55 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+  <div class="container">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse float-right" id="navbarNavAltMarkup">
+        {% for page in pages %}
+    <a class="navbar-brand" href="{% url 'blog:home' %}">
+      <img src="{{ page.logo.url }}" class="logo" alt="">
+    </a>{% endfor %}
+        {% for page in pages %}
+        <ul class="navbar-nav ml-auto">
+          <li {% if 'home' in request.path %} class="nav-item active mr-3" {% else %} class="nav-item mr-3" {% endif %}>
+            <a class="nav-link" href="{% url 'blog:home' %}"> {{ page.menu_title }}</a>
+          </li>
+          <li {% if 'about' in request.path %}class="nav-item active mr-3" {% else %} class="nav-item mr-3" {% endif %}>
+            <a class="nav-link" href="{% url 'blog:about' %}">{{ page.menu_title1 }}</a>
+          </li>
+          <li {% if 'listing' in request.path %}class="nav-item active mr-3" {% else %} class="nav-item mr-3" {% endif %}>
+            <a class="nav-link" href="{% url 'listings:listings' %}"> {{ page.menu_title2 }} </a>
+          </li>
+        </ul>{% endfor %}
+      <ul class="navbar-nav ">
+        {% if user.is_authenticated %}
+        <li {% if 'dashboard' in request.path %} class="nav-item active mr-3" {% else %} class="nav-item mr-3"
+          {% endif %}>
+          <a class="nav-link" href="{% url 'accounts:dashboard' %}">
+           داشبورد {{ user.username }}
+          </a>
+        </li>
+        <li class="nav-item mr-3">
+          <a class="nav-link" href="javascript:{document.getElementById('logout').submit()}">
+            <i class="fas fa-sign-out-alt"></i> خروج </a>
+          <form action="{% url 'accounts:logout' %}" method="POST" id="logout">
+            {% csrf_token %}
+            <input type="hidden">
+          </form>
+        </li>
+        {% else %}
+        <li {% if 'register' in request.path %} class="nav-item active mr-3" {% else %} class="nav-item mr-3"
+          {% endif %}>
+          <a class="nav-link" href="{% url 'accounts:register' %}">
+            <i class="fas fa-user-plus"></i> ثبت نام </a>
+        </li>
+        <li {% if 'login' in request.path %} class="nav-item active mr-3" {% else %} class="nav-item mr-3" {% endif %}>
+          <a class="nav-link" href="{% url 'accounts:login' %}">
+            <i class="fas fa-sign-in-alt"></i> ورود </a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  
+  </div>
+</nav>

@@ -1,0 +1,42 @@
+<footer id="main-footer" class="py-4 bg-primary text-white text-center">
+  <div class="container bottom_border">
+    <div class="row">
+
+      <div class=" col-sm-4 col-md  col-12 col">
+        {% for abo in about %}
+        <h5 class="headin5_amrc col_white_amrc m-5">{{ abo.sub_title}}</h5>
+        <p class="mb10 mb-5">{{ abo.summary }}
+        </p>{% endfor %}
+      </div>
+      <div class="col-sm-4 col-md col-sm-4 col-12 col mt-5 ">
+        <div class="social-foot mt-5 mb-5">
+          {% for social in socialmedia.all %}
+          {% if social.icon %}
+          <a href="{{ social.url }}">
+            {{ social.icon.as_html }}
+          </a>
+          {% endif %}
+          {% if social.png %}
+          <a href="{{ social.url }}">
+            <img class="png " style="width:22px;" src="{{ social.png.url }}"></a>
+          {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class=" col-sm-4 col-md col-sm-4  col-12 col">
+        {% for cont in contact %}
+        <h5 class="headin5_amrc col_white_amrc pt2 m-5"> {{ cont.title }}</h5>
+        <!--headin5_amrc-->
+        <p class="mb10">{{ cont.summary }}
+        </p>
+
+        <p>{{ cont.icon1.as_html }} {{ cont.location }} </p>
+        <p>{{ cont.icon2.as_html }} {{ cont.phone }} </p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  Copyright &copy;
+  <span class="year"></span> سیامک عباس نژاد
+</footer>

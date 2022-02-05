@@ -1,0 +1,144 @@
+{% extends 'shared/base.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %} خوش آمدید | {% endblock %}
+{% block content %}
+<section id="showcase">
+  <div class="container text-center">
+    {% for page in pages %}
+    <div class="home-search p-5">
+      <div class="overlay p-5">
+        <h1 class="display-4 mb-4">
+          {{ page.title }}
+        </h1>
+        <p class="lead"> {{ page.page_title }}</p>
+        <div class="search">
+          <form action="{% url 'listings:search' %}" method="GET">
+            <!-- Form Row 1 -->
+            <div class="form-row">
+              <div class="col-md-4 mb-3">
+                <label class="sr-only">کیبورد</label>
+                <input type="text" name="keywords" class="form-control" placeholder="کیبورد">
+              </div>
+
+              <div class="col-md-4 mb-3">
+                <label class="sr-only"> شهر </label>
+                <input type="text" name="city" class="form-control" placeholder="نام شهر">
+
+              </div>
+
+              <div class="col-md-4 mb-3">
+                <label class="sr-only"> منطقه </label>
+                <select name="state" class="form-control">
+                  <option selected="true" disabled="disabled"> منطقه </option>
+                  {% for key, value in state_choices.items %}
+                  <option value="{{ value }}">{{ value }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <!-- Form Row 2 -->
+            <div class="form-row">
+              <div class="col-md-6 mb-3">
+                <label class="sr-only"> اتاق خواب </label>
+                <select name="bedrooms" class="form-control">
+                  <option selected="true" disabled="disabled"> چند خوابه </option>
+                  {% for key, value in bedroom_choices.items %}
+                  <option value="{{ key }}">{{ value }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="col-md-6 mb-3">
+                <select name="price" class="form-control" id="type">
+                  <option selected="true" disabled="disabled"> حداکثر قیمت </option>
+                  {% for key, value in price_choices.items %}
+                  <option value="{{ key }}"> {{ value }} </option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <button class="btn btn-secondary btn-block mt-4" type="submit"> جستجو </button>
+          </form>
+        </div>
+      </div>
+    </div>{% endfor %}
+  </div>
+</section>
+{% include 'partials/_alerts.html' %}
+<section id="listings" class="py-5">
+  <div class="container">{% for page in pages %}
+    <h3 class="text-center mb-3"> {{ page.card_title}} </h3>
+    <div class="row">
+      {% if listings %}
+      {% for listing in listings %}
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card listing-preview shadow-lg mb-5 rounded">
+          <img class="card-img-top" src="{{ listing.photo_main.url }}" alt="">
+          <div class="card-img-overlay">
+            <h2>
+              <span class="badge badge-secondary text-white float-left">{{ listing.price | intcomma }} ریال </span>
+            </h2>
+          </div>
+          <div class="card-body">
+            <div class="listing-heading text-center">
+              <h4 class="text-primary">{{ listing.title }} </h4>
+              <p>
+                <i class="fas fa-map-marker text-secondary"></i>
+                {{ listing.city }}-{{ listing.state }} {{ listing.zipcode }}</p>
+            </div>
+            <hr>
+            <div class="row py-2 text-secondary">
+              <div class="col-6">
+                <i class="fas fa-th-large"></i> میدان:{{ listing.sqft }}</div>
+              <div class="col-6">
+                <i class="fas fa-car"></i> گاراژ: {{ listing.garage }}</div>
+            </div>
+            <div class="row py-2 text-secondary">
+              <div class="col-6">
+                <i class="fas fa-bed"></i> چند خوابه: {{ listing.bedrooms }}</div>
+              <div class="col-6">
+                <i class="fas fa-bath"></i> دستشویی: {{ listing.bathroom }} </div>
+            </div>
+            <hr>
+            <div class="row py-2 text-secondary">
+              <div class="col-12">
+                <i class="fas fa-user"></i> مشاور فروش: {% for real in listing.realtor.all %}{{ real.name }}|
+                {% endfor %}</div>
+            </div>
+            <div class="row text-secondary pb-2">
+              <div class="col-12">
+                <i class="fas fa-clock"></i> {{ listing.published_at | timesince }}</div>
+            </div>
+            <hr>
+            <a href="{{ listing.get_absolute_url }}" class="btn btn-primary btn-block"> اطلاعات بیشتر</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      {% else %}
+      <div class="col_md_12">
+        <p>لیستی وجود نداره</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>{% endfor %}
+</section>
+
+<section id="services" class="py-5 bg-secondary text-white">
+  <div class="container">
+    <div class="row text-center">
+      {% for subfoot in subfooter %}
+      <div class="col-md-4">
+        {% if subfoot.icon %}
+        <div style="font-size:45px">{{ subfoot.icon.as_html }}</div>
+        {% endif %}
+        <hr>
+        <h3>{{ subfoot.title }} </h3>
+        <p> {{ subfoot.body }}
+        </p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}
