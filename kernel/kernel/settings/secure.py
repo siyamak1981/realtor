@@ -12,10 +12,16 @@ DATABASES = {
     #     'HOST': config('DB_HOST'),
     #     'PORT': config('DB_PORT', cast=int)
     # }
-   
+
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': config('DB_NAME'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': "realtor$realtor",
+        "HOST": "realtor.mysql.pythonanywhere-services.com",
+        "PASSWORD": "siyamak1981",
+        'OPTIONS': {
+            'sql_mode': 'traditional',
+        }
+
     }
 
 }
